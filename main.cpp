@@ -47,7 +47,7 @@ int main()
 	SOCKADDR_IN ClientSockAddr;
 	memset(&ClientSockAddr, 0, sizeof(ClientSockAddr));
 	int ClientSockAddrLength = sizeof(ClientSockAddr);
-	int ClientSocket = accept(ServerSocket, (SOCKADDR*)&ClientSockAddr, &ClientSockAddrLength);
+	SOCKET ClientSocket = accept(ServerSocket, (SOCKADDR*)&ClientSockAddr, &ClientSockAddrLength);
 	if (ClientSocket == INVALID_SOCKET)
 	{
 		cout << "can't accept." << GetLastError() << endl;
@@ -55,7 +55,7 @@ int main()
 	}
 
 	const char* Message = "Hello World";
-	int SendBytes = send(ClientSocket, Message, strlen(Message) + 1, 0);
+	int SendBytes = send(ClientSocket, Message, (int)strlen(Message) + 1, 0);
 	if (SendBytes == 0)
 	{
 		cout << "connect close." << GetLastError() << endl;

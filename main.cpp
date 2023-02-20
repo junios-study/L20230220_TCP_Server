@@ -44,35 +44,41 @@ int main()
 		return -1;
 	}
 
-	SOCKADDR_IN ClientSockAddr;
-	memset(&ClientSockAddr, 0, sizeof(ClientSockAddr));
-	int ClientSockAddrLength = sizeof(ClientSockAddr);
-	SOCKET ClientSocket = accept(ServerSocket, (SOCKADDR*)&ClientSockAddr, &ClientSockAddrLength);
-	if (ClientSocket == INVALID_SOCKET)
-	{
-		cout << "can't accept." << GetLastError() << endl;
-		return -1;
-	}
+	const char* Message = "오늘끝.";
 
-	const char* Message = "Hello World";
-	int SendBytes = send(ClientSocket, Message, (int)strlen(Message) + 1, 0);
-	if (SendBytes == 0)
+
+	while (1)
 	{
-		cout << "connect close." << GetLastError() << endl;
+		SOCKADDR_IN ClientSockAddr;
+		memset(&ClientSockAddr, 0, sizeof(ClientSockAddr));
+		int ClientSockAddrLength = sizeof(ClientSockAddr);
+		SOCKET ClientSocket = accept(ServerSocket, (SOCKADDR*)&ClientSockAddr, &ClientSockAddrLength);
+		if (ClientSocket == INVALID_SOCKET)
+		{
+			cout << "can't accept." << GetLastError() << endl;
 			return -1;
-	}
-	else if (SendBytes < 0)
-	{
-		cout << "error close." << GetLastError() << endl;
-		return -1;
-	}
+		}
 
-	closesocket(ClientSocket);
+		int SendBytes = send(ClientSocket, Message, (int)strlen(Message) + 1, 0);
+		if (SendBytes == 0)
+		{
+			cout << "connect close." << GetLastError() << endl;
+			return -1;
+		}
+		else if (SendBytes < 0)
+		{
+			cout << "error close." << GetLastError() << endl;
+			return -1;
+		}
+
+		closesocket(ClientSocket);
+		cout << Message << endl;
+
+	}
 	closesocket(ServerSocket);
 
 	//Winsock 정리
 	WSACleanup();
 
-	cout << "Hello World" << endl;
 	return 0;
 }
